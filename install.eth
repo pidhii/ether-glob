@@ -1,4 +1,4 @@
-open IO
+let {*} = @(require 'io')
 
 let pub name = "glob"
 let pub main = "lib.so"

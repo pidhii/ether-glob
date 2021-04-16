@@ -25,7 +25,7 @@ _glob(void)
   }
 
   eth_t acc = eth_nil;
-  for (int i = g.gl_pathc - 1; i > 0; --i)
+  for (int i = g.gl_pathc - 1; i >= 0; --i)
     acc = eth_cons(eth_str(g.gl_pathv[i]), acc);
 
   globfree(&g);
@@ -35,8 +35,14 @@ _glob(void)
 int
 ether_module(eth_module *mod, eth_root *root)
 {
-  eth_define(mod, "__glob", eth_proc(_glob, 2));
-  if (not eth_add_module_script(mod, "./lib.eth", root))
+  eth_module *detail = eth_create_module("glob.detail", NULL);
+  eth_define(detail, "__glob", eth_proc(_glob, 2));
+
+  eth_module *aux = eth_load_module_from_script2(root, "./lib.eth", NULL, detail);
+  eth_destroy_module(detail);
+  if (not aux)
     return -1;
+  eth_copy_defs(aux, mod);
+  eth_destroy_module(aux);
   return 0;
 }
