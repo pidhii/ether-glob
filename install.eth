@@ -1,13 +1,12 @@
-let {*} = @(require 'io') in
+open 'io'
 
-let pub name = "glob" in
-let pub main = "lib.so" in
-let pub files = ["lib.so", "lib.eth"] in
+let pub name = "glob"
+let pub main = "lib.so"
+let pub files = ["lib.so" "lib.eth"]
 
-let pub build! =
-  let etherFlags = shell "pkg-config ether --cflags --libs" in
-  if system "gcc {etherFlags} -olib.so -rdynamic -fpic -shared lib.c" != 0 then
-    failure nil;
-in
+let pub build() = {
+  let etherFlags = shell("pkg-config ether --cflags --libs")
+  if system("gcc {etherFlags} -olib.so -rdynamic -fpic -shared lib.c") != 0 then
+    failure(nil)
+}
 
-nil

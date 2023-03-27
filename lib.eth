@@ -1,4 +1,3 @@
 
-let pub glob s = __glob s 0 in
+let pub glob(s) = __glob(s, 0)
 
-nil
